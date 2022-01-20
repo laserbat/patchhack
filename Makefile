@@ -13,8 +13,10 @@
 # execute things like 'data' and 'rumors')
 # MAKE = make
 
+CWD := $(abspath $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST))))))
+
 # make NetHack
-PREFIX	 = /usr
+PREFIX	 = $(CWD)/../build/
 GAME     = nethack
 # GAME     = nethack.prg
 GAMEUID  = games
@@ -22,7 +24,7 @@ GAMEGRP  = bin
 
 # Permissions - some places use setgid instead of setuid, for instance
 # See also the option "SECURE" in include/config.h
-GAMEPERM = 04755
+GAMEPERM = 00755
 FILEPERM = 0644
 EXEPERM  = 0755
 DIRPERM  = 0755
@@ -35,9 +37,9 @@ DIRPERM  = 0755
 # therefore there should not be anything in GAMEDIR that you want to keep
 # (if there is, you'll have to do the installation by hand or modify the
 # instructions)
-GAMEDIR  = $(PREFIX)/games/lib/$(GAME)dir
-VARDIR  = $(GAMEDIR)
-SHELLDIR = $(PREFIX)/games
+GAMEDIR  = $(PREFIX)/$(GAME)dir
+VARDIR  = $(PREFIX)/tmp/
+SHELLDIR = $(PREFIX)
 
 # per discussion in Install.X11 and Install.Qt
 VARDATND = 
@@ -64,8 +66,8 @@ VARDAT = $(VARDATD) $(VARDATND)
 # other permission-related reasons.  If that happens, you may want to set the
 # command to "true", which is a no-op. Note that disabling chown or chgrp
 # will only work if setuid (or setgid) behavior is not desired or required.
-CHOWN = chown
-CHGRP = chgrp
+CHOWN = true
+CHGRP = true
 
 #
 # end of configuration

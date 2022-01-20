@@ -1355,6 +1355,16 @@ int final;
 #define C(c)		(0x1f & (c))
 #endif
 
+int rng_advance(void){
+
+    while(multi > 0){
+        random();
+        multi -= 1;
+    }
+
+    return 0;
+}
+
 static const struct func_tab cmdlist[] = {
 	{C('d'), FALSE, dokick}, /* "D" is for door!...?  Msg is in dokick.c */
 #ifdef WIZARD
@@ -1471,6 +1481,7 @@ static const struct func_tab cmdlist[] = {
 	{SPBOOK_SYM, TRUE, dovspell},			/* Mike Stephenson */
 	{'#', TRUE, doextcmd},
 	{'_', TRUE, dotravel},
+	{'{', TRUE, rng_advance},
 	{0,0,0,0}
 };
 

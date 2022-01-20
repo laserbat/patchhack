@@ -36,7 +36,7 @@ SHELL=/bin/sh
 # SHELL=E:/GEMINI2/MUPFEL.TTP
 
 # Normally, the C compiler driver is used for linking:
-LINK=$(CC)
+LINK=$(CC) -static
 
 # Pick the SYSSRC and SYSOBJ lines corresponding to your desired operating
 # system.
@@ -151,7 +151,7 @@ GNOMEINC=-I/usr/lib/glib/include -I/usr/lib/gnome-libs/include -I../win/gnome
 # flags for debugging:
 # CFLAGS = -g -I../include
 
-CFLAGS = -O -I../include
+CFLAGS = -Og -g -I../include
 LFLAGS = 
 
 # The Qt and Be window systems are written in C++, while the rest of
@@ -230,8 +230,8 @@ WINOBJ = $(WINTTYOBJ)
 # WINTTYLIB = -ltermcap
 # WINTTYLIB = -lcurses
 # WINTTYLIB = -lcurses16
-# WINTTYLIB = -lncurses
-WINTTYLIB = -ltermlib
+WINTTYLIB = -lncurses
+# WINTTYLIB = -ltermlib
 #
 # libraries for X11
 # If USE_XPM is defined in config.h, you will also need -lXpm here.
@@ -290,8 +290,8 @@ GAME     = nethack
 
 # if you defined RANDOM in unixconf.h/tosconf.h since your system did not come
 # with a reasonable random number generator
-# RANDOBJ = random.o
-RANDOBJ =
+RANDOBJ = random.o
+# RANDOBJ =
 
 
 # used by `make depend' to reconstruct this Makefile; you shouldn't need this

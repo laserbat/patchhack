@@ -464,7 +464,12 @@ setrandom()
 	 * routine names into one via #defines is even more confusing
 	 */
 #ifdef RANDOM	/* srandom() from sys/share/random.c */
-	srandom((unsigned int) time((time_t *)0));
+    unsigned int seed = time((time_t *)0);
+
+    if(nh_getenv("SEED"))
+        seed = strtol(nh_getenv("SEED"), NULL, 0);
+
+	srandom(seed);
 #else
 # if defined(__APPLE__) || defined(BSD) || defined(LINUX) || defined(ULTRIX) || defined(CYGWIN32) /* system srandom() */
 #  if defined(BSD) && !defined(POSIX_TYPES)

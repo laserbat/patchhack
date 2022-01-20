@@ -1449,7 +1449,7 @@ const char *filename;
 
 const char *configfile =
 #ifdef UNIX
-			".nethackrc";
+			"../nethackrc";
 #else
 # if defined(MAC) || defined(__BEOS__)
 			"NetHack Defaults";
@@ -1549,11 +1549,15 @@ const char *filename;
 	if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
 		return(fp);
 # else	/* should be only UNIX left */
+    /*
 	envp = nh_getenv("HOME");
 	if (!envp)
 		Strcpy(tmp_config, configfile);
 	else
 		Sprintf(tmp_config, "%s/%s", envp, configfile);
+    */
+
+    Strcpy(tmp_config, configfile);
 	if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
 		return(fp);
 # if defined(__APPLE__)

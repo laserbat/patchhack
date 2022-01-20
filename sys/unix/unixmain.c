@@ -307,6 +307,9 @@ char *argv[];
 		case 'D':
 #ifdef WIZARD
 			{
+              wizard = TRUE;
+              break;
+
 			  char *user;
 			  int uid;
 			  struct passwd *pw = (struct passwd *)0;
