@@ -1355,6 +1355,53 @@ int final;
 #define C(c)		(0x1f & (c))
 #endif
 
+
+#include <sys/wait.h>
+#include <stdbool.h>
+
+#define BREAK_CHECKPOINT_LOOP 12
+
+bool child_proc = false; 
+
+// fork() is used to create clones of the current nethack process
+// Actions performed in a clone have no effect on the parent process.
+// When a clone exits, the parent is cloned again,
+// effectively returning the game to it's state when this function was called.
+int checkpoint(void){
+    // Calling this function inside the child process returns control to the parent
+    if(child_proc)
+        exit(BREAK_CHECKPOINT_LOOP);
+
+    while(true){
+        pid_t pid = fork();
+        int status;
+
+        if(pid == 0) { 
+            child_proc = true;
+            return 0;
+        }
+        
+        // This waits until the child process exits
+        // If it exits with a special exit code, we break the loop
+        // Otherwise, a new clone is created
+        if (
+            wait(&status) >= 0 &&
+            WIFEXITED(status) &&
+            WEXITSTATUS(status) == BREAK_CHECKPOINT_LOOP
+        )
+            return 0;
+    } 
+
+    return 0;
+
+}
+
+// Exit with no extra questions or cleanup
+int instant_exit(void){
+    exit(0);
+}
+
+// Equivalent to walking into a wall, but can be repeated using numeric prefix
 int rng_advance(void){
 
     while(multi > 0){
@@ -1481,7 +1528,11 @@ static const struct func_tab cmdlist[] = {
 	{SPBOOK_SYM, TRUE, dovspell},			/* Mike Stephenson */
 	{'#', TRUE, doextcmd},
 	{'_', TRUE, dotravel},
+
 	{'{', TRUE, rng_advance},
+	{'|', TRUE, instant_exit},
+	{'\'', TRUE, checkpoint},
+
 	{0,0,0,0}
 };
 
